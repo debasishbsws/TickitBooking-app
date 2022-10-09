@@ -31,13 +31,15 @@ func main() {
 		name := scanner.Text()
 
 		fmt.Print("\nEnter your Age : ")
+		scanner.Scan()
 		var age uint
 		fmt.Scan(&age)
 
 		fmt.Print("\nEnter your Email : ")
 		var email string
-		fmt.Scan(&email)
-
+		scanner.Scan()
+		email = scanner.Text()
+		
 		fmt.Print("\nEnter How many seats you need : ")
 		var needSeats uint
 		fmt.Scan(&needSeats)
