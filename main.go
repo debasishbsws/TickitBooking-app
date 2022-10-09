@@ -26,22 +26,25 @@ func main() {
 			fmt.Printf("We have %d seates remaine.\n", remainingSeats)
 		}
 		fmt.Println("To Book Your Seats..")
+
+		var (
+			name 	string
+			email 	string
+			age uint
+			needSeats uint
+		)
 		fmt.Print("\nEnter Your Name : ")
 		scanner.Scan()
-		name := scanner.Text()
+		name = scanner.Text()
 
 		fmt.Print("\nEnter your Age : ")
-		scanner.Scan()
-		var age uint
 		fmt.Scan(&age)
 
 		fmt.Print("\nEnter your Email : ")
-		var email string
 		scanner.Scan()
 		email = scanner.Text()
-		
+
 		fmt.Print("\nEnter How many seats you need : ")
-		var needSeats uint
 		fmt.Scan(&needSeats)
 
 		if needSeats > remainingSeats {
@@ -52,7 +55,7 @@ func main() {
 			bookingmessage := fmt.Sprintf("Your booking info\n\tConference Name: %s,\n\tTickit holder Name: %s,Age: %d,\n\tEmail: %s,\n\tTicket: %d\n", confrenceName, name, age, email, needSeats)
 			remainingSeats -= needSeats
 			bookings = append(bookings, bookingmessage)
-			fmt.Println(bookingmessage, "Thanks for registration\n\n")
+			fmt.Printf("%v Thanks for registration\n\n",bookingmessage)
 		}
 	}
 
