@@ -5,10 +5,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
+	"time"
 )
 
 const confrenceName = "GopherCon"
 const maxAttendees = 50
+var wg = sync.WaitGroup{}
 
 type userData struct {
 	name string
@@ -34,8 +37,9 @@ func main() {
 		isValidName, isValidEmail, isValidSeats := validateUserInputs(name, email, needSeats, remainingSeats)
 
 		if isValidName && isValidEmail && isValidSeats {
-			bookingMessage := bookTickits(name, email, age, needSeats, &remainingSeats, &bookings)
-			fmt.Printf("%v Thanks for registration\n\n",bookingMessage)
+			attendent := bookTickits(name, email, age, needSeats, &remainingSeats, &bookings)
+			wg.Add(1)
+			go sendTickits(*attendent)
 		}else {
 			if !isValidSeats {
 				fmt.Printf("Invalid Tickits request. %d seats remaining.., please enter the appropreate number.\n\n", remainingSeats)
@@ -52,6 +56,7 @@ func main() {
 	}
 
 	fmt.Println(bookings)
+	wg.Wait()
 }
 
 func greetUsers(remainingSeats uint) bool {
@@ -115,4 +120,11 @@ func NewUser(name string, email string, age uint, needSeats int) *userData {
 	user.needSeats = needSeats
 
 	return user
+}
+
+func sendTickits(attendent userData){
+	time.Sleep(20 * time.Second)
+	var emailText = fmt.Sprintf("Hey %v,\n\tThanks for registration for %v\n Here are Your %v Tickits",attendent.name,confrenceName,attendent.needSeats)
+	fmt.Println(emailText + "\n Send to " + attendent.email)
+	wg.Done()
 }
