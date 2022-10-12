@@ -7,15 +7,22 @@ import (
 	"strings"
 )
 
-	const confrenceName = "GopherCon"
-	const maxAttendees = 50
-	var scanner = bufio.NewScanner(os.Stdin)
+const confrenceName = "GopherCon"
+const maxAttendees = 50
+
+type userData struct {
+	name string
+	email string
+	age uint
+	needSeats int
+}
+	
 
 func main() {
 	
 	var remainingSeats uint = maxAttendees
 
-	var bookings []string = make([]string, 0, maxAttendees);
+	var bookings []userData = make([]userData, 0, maxAttendees);
 
 	for {
 		if !greetUsers(remainingSeats) {
@@ -45,8 +52,6 @@ func main() {
 	}
 
 	fmt.Println(bookings)
-
-
 }
 
 func greetUsers(remainingSeats uint) bool {
@@ -72,6 +77,7 @@ func validateUserInputs(name, email string, needSeats int, remainingSeats uint) 
 }
 
 func getUsersInput()(string, string, uint,int) {
+	var scanner = bufio.NewScanner(os.Stdin)		
 	var (
 			name 	string
 			email 	string
@@ -94,9 +100,19 @@ func getUsersInput()(string, string, uint,int) {
 	return name, email, age, needSeats
 }
 
-func bookTickits(name string, email string, age uint, needSeats int, remainingSeats *uint, bookings *[]string) string {
-	bookingmessage := fmt.Sprintf("Your booking info\n\tConference Name: %s,\n\tTickit holder Name: %s,Age: %d,\n\tEmail: %s,\n\tTicket: %d\n", confrenceName, name, age, email, needSeats)
+func bookTickits(name string, email string, age uint, needSeats int, remainingSeats *uint, bookings *[]userData) *userData {
+	newUser := NewUser(name,email,age,needSeats)
 	*remainingSeats -= uint(needSeats)
-	*bookings = append(*bookings, bookingmessage)
-	return bookingmessage
+	*bookings = append(*bookings, *newUser)
+	return newUser
+}
+
+func NewUser(name string, email string, age uint, needSeats int) *userData {
+	user := new(userData)
+	user.name = name
+	user.age = age
+	user.email = email
+	user.needSeats = needSeats
+
+	return user
 }
